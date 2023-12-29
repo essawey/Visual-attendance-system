@@ -134,16 +134,16 @@ def image_error():
     # Set the cursor position
     lcd_set_cursor(col=0, row=0)
     # Write each character of the text to the LCD
-    for char in "IMG: .JPG or .PNG":
+    for char in "IMG .JPG or .PNG":
         lcd_write(ord(char))
     # Set the cursor position
         
-    lcd_set_cursor(col=0, row=2)
+    lcd_set_cursor(col=0, row=1)
     # Write each character of the text to the LCD
-    for char in "ERROR 1":
+    for char in "ERROR #1":
         lcd_write(ord(char))
 
-    time.sleep(10)
+    time.sleep(100)
 
     RED_LED.write(False)
     ORANGE_LED.write(False)
@@ -160,14 +160,46 @@ def camera_error():
         lcd_write(ord(char))
     # Set the cursor position
         
-    lcd_set_cursor(col=0, row=2)
+    lcd_set_cursor(col=0, row=1)
     # Write each character of the text to the LCD
-    for char in "ERROR 2":
+    for char in "ERROR #2":
         lcd_write(ord(char))
 
-    time.sleep(10)
+    time.sleep(100)
 
     RED_LED.write(False)
     ORANGE_LED.write(False)
     GRREN_LED.write(False)
     lcd_command(0x01)
+
+def image_not_found():
+    RED_LED.write(True)
+    ORANGE_LED.write(True)
+    # Set the cursor position
+    lcd_set_cursor(col=0, row=0)
+    # Write each character of the text to the LCD
+    for char in "No Images Found":
+        lcd_write(ord(char))
+    # Set the cursor position
+        
+    lcd_set_cursor(col=0, row=1)
+    # Write each character of the text to the LCD
+    for char in "ERROR #1":
+        lcd_write(ord(char))
+
+    time.sleep(100)
+
+    RED_LED.write(False)
+    ORANGE_LED.write(False)
+    GRREN_LED.write(False)
+    lcd_command(0x01)
+
+
+def endLCD():
+    lcd_set_cursor(col=0, row=0)
+    for char in "Check you mail":
+        lcd_write(ord(char))
+        
+    lcd_set_cursor(col=0, row=1)
+    for char in "Thank you!":
+        lcd_write(ord(char))

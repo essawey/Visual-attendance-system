@@ -41,13 +41,10 @@ def index():
         if int(request_ROOM_NUM) == int(getRoomNum()):
             global START_TIME
             START_TIME = datetime.now()
+            START_TIME = str(START_TIME.strftime("%Y-%m-%d-%I-%M_%p"))
+
             wb = openpyxl.Workbook()
             wb.save(os.path.join(os.getcwd(),"attendence_excel.xlsx"))
-
-            START_TIME = str(START_TIME.strftime("%Y-%m-%d-%I-%M_%p"))
-            print("sending email")
-            sendEmail_Start(DR_EMAIL,COURSE_CODE,REAL_OTP)
-            print("done email")
 
             start_session(groupPath(MAJOR,
                                     YEAR,

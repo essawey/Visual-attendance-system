@@ -7,8 +7,9 @@ def start_session(groupPath):
     import openpyxl
     import cv2
     from datetime import datetime
-    from IoT import printLCD, red_led, orange_led, green_led, image_error, camera_error
-
+    from sendEmail import sendEmail_Start
+    from IoT import printLCD, red_led, orange_led, green_led, image_error, camera_error,image_not_found, endLCD
+    printLCD("please wait")
 
     # from picamera2 import Picamera2
     # picam2 = Picamera2()
@@ -50,6 +51,9 @@ def start_session(groupPath):
     image_files = glob.glob(os.path.join(dataPath, '**/*.jpg'), recursive=True)
     image_files.extend(glob.glob(os.path.join(dataPath, '**/*.png'), recursive=True))
 
+    if len(os.listdir(dataPath)) == 0:
+        image_not_found()
+
     if len(image_files) == 0:
         image_error()
     ###############################################################################################
@@ -87,6 +91,9 @@ def start_session(groupPath):
 
 
     cap = cv2.VideoCapture(0) # port of the Built-in Cam
+    print("sending email")
+    sendEmail_Start(app.DR_EMAIL,app.COURSE_CODE,app.REAL_OTP)
+    print("done email")
 
     while True:
         # Grab a single frame of video
@@ -150,5 +157,5 @@ def start_session(groupPath):
         if app.END_SECTION:
             cap.release()
             if app.REAL_OTP == app.unknow_OTP:
-                orange_led()
+                endLCD()
                 exit()

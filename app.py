@@ -105,7 +105,7 @@ def novaildEmail():
 
 if __name__ == '__main__':
     # Start the LCD
-    install_dependencies()
+    # install_dependencies()
     lcd_init()
     printSYSEMSTART()
     app.run()

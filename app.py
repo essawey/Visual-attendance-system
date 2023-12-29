@@ -78,7 +78,9 @@ def endSession():
         COURSE_CODE = re.sub(r'[^a-zA-Z0-9_-]', '_', str(COURSE_CODE))
 
         os.rename("attendence_excel.xlsx", f"attendence_{COURSE_CODE}_{START_TIME}_.xlsx")
+        print("send end email")
         sendEmail_End(DR_EMAIL, COURSE_CODE, FILE_PATH = f"attendence_{COURSE_CODE}_{START_TIME}_.xlsx")
+        print("done send end email")
         # zip for run folder + attendence.xlsx and send
         os.remove(f"attendence_{COURSE_CODE}_{START_TIME}_.xlsx")
         return thanks()

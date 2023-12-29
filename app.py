@@ -19,7 +19,6 @@ START_TIME = None
 unknow_OTP = None
 REAL_OTP = generate_otp()
 
-# Sample data for 'the dropdown list
 majors = ["Artificial Intelligence", "Computer Science", "Business", "Biotechnology", "Engineering"]
 years = ["Freshman", "Sophomores", "Junior", "Senior 1", "Senior 2"]
 
@@ -84,6 +83,11 @@ def endSession():
 
         os.remove(os.path.join(os.path.join(os.getcwd(), "log"), "log.jpg"))
         os.remove(f"attendence_{COURSE_CODE}_{START_TIME}.xlsx")
+        # Exit the IoT
+
+        lcd_command(0x01)
+        time.sleep(1)
+        board.exit()
         return thanks()
     return render_template('endSession.html')
 
@@ -110,8 +114,3 @@ if __name__ == '__main__':
     lcd_init()
     printSYSEMSTART()
     app.run()
-
-    # Exit the IoT
-    lcd_command(0x01)
-    time.sleep(1)
-    board.exit()

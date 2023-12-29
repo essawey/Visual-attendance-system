@@ -4,3 +4,4 @@ numpy==1.26.2
 opencv_python==4.8.1.78
 openpyxl==3.1.2
 pyFirmata2==2.4.5
+sockets==1.0.0

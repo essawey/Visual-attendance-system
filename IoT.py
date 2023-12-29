@@ -184,7 +184,7 @@ def image_not_found():
         
     lcd_set_cursor(col=0, row=1)
     # Write each character of the text to the LCD
-    for char in "ERROR #1":
+    for char in "ERROR #3":
         lcd_write(ord(char))
 
     time.sleep(100)
@@ -194,7 +194,6 @@ def image_not_found():
     GRREN_LED.write(False)
     lcd_command(0x01)
 
-
 def endLCD():
     lcd_set_cursor(col=0, row=0)
     for char in "Check you mail":
@@ -203,3 +202,21 @@ def endLCD():
     lcd_set_cursor(col=0, row=1)
     for char in "Thank you!":
         lcd_write(ord(char))
+
+def no_internet():
+    GRREN_LED.write(True)
+    ORANGE_LED.write(True)
+    RED_LED.write(True)
+    # Set the cursor position
+    lcd_set_cursor(col=0, row=0)
+    # Write each character of the text to the LCD
+    for char in "No internet":
+        lcd_write(ord(char))
+    # Set the cursor position
+        
+    lcd_set_cursor(col=0, row=1)
+    # Write each character of the text to the LCD
+    for char in "ERROR #4":
+        lcd_write(ord(char))
+
+    time.sleep(100)

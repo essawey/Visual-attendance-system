@@ -7,8 +7,8 @@ def start_session(groupPath):
     import openpyxl
     import cv2
     from datetime import datetime
-    from sendEmail import sendEmail_Start
-    from IoT import printLCD, red_led, orange_led, green_led, image_error, camera_error,image_not_found, endLCD
+    from sendEmail import sendEmail_Start, is_internet_connected
+    from IoT import printLCD, red_led, orange_led, green_led, image_error, camera_error,image_not_found, endLCD ,no_internet
     printLCD("please wait")
 
     # from picamera2 import Picamera2
@@ -90,6 +90,8 @@ def start_session(groupPath):
             camera_error()
 
 
+    if not is_internet_connected():
+        no_internet()
     cap = cv2.VideoCapture(0) # port of the Built-in Cam
     print("sending email")
     sendEmail_Start(app.DR_EMAIL,app.COURSE_CODE,app.REAL_OTP)
@@ -158,4 +160,3 @@ def start_session(groupPath):
             cap.release()
             if app.REAL_OTP == app.unknow_OTP:
                 endLCD()
-                exit()

@@ -4,6 +4,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
 import re
+import socket
 
 SYSTEM_EMAIL = "Attendance.NU@gmail.com"
 PASSWORD = "dyftxileardalgvi"
@@ -73,3 +74,11 @@ def sendEmail_Start(DR_EMAIL, COURSE_CODE, OTP_PASSCODE):
 def checkEmail(email):
     gmail_regex = r"^[a-zA-Z0-9.]+@gmail\.com$"
     return bool(re.match(gmail_regex, email))
+
+def is_internet_connected():
+    try:
+        # Try to create a socket connection to a well-known server (e.g., Google's public DNS server)
+        socket.create_connection(("8.8.8.8", 53), timeout=5)
+        return True  # Connection successful, internet is available
+    except OSError:
+        return False  # Connection failed, no internet

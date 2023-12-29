@@ -36,7 +36,7 @@ def index():
         print("*"*100)
         print(DR_EMAIL, request_ROOM_NUM, getRoomNum(), COURSE_CODE , groupPath(MAJOR,YEAR,majors,years))
         if not checkEmail(DR_EMAIL):
-            return noRoom()
+            return novaildEmail()
 
         if int(request_ROOM_NUM) == int(getRoomNum()):
             global START_TIME
@@ -98,6 +98,10 @@ def noRoom():
 @app.route('/thanks')
 def thanks():
     return render_template('thanks.html')
+
+@app.route('/novaildEmail')
+def novaildEmail():
+    return render_template('novaildEmail.html')
 
 if __name__ == '__main__':
     # Start the LCD

@@ -90,6 +90,7 @@ def start_session(groupPath):
 
     while True:
         # Grab a single frame of video
+
         _, frame = cap.read()
         # picam2.start_and_capture_file(os.path.join(logPath, "log.jpg"))
         cv2.imwrite(os.path.join(logPath, "log.jpg"), frame)
@@ -102,11 +103,10 @@ def start_session(groupPath):
         small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
 
         # Find all the faces and face encodings in the current frame of video
-        face_locations = face_recognition.face_locations(small_frame, number_of_times_to_upsample = 0)
-
+        face_locations = face_recognition.face_locations(small_frame, number_of_times_to_upsample = 0) 
         face_encodings = face_recognition.face_encodings(small_frame, face_locations) # N num of stdents per image
 
-        idList = []
+
         for face_encoding in face_encodings:
             id = 'unkown'
             # See if the face is a match for the known face(s)
@@ -118,46 +118,37 @@ def start_session(groupPath):
             if matches[best_match_index]:
                 id = knownIDs[best_match_index]
 
-            idList.append(id)
-            print("idList")
-            print(idList)
-            for id in idList: # FIXME check for len(), if always equals one remove loop
-                if(id[:-4] not in already_attendence_taken and id != 'unkown'):
-                    
-                    worksheet.cell(row, col, int(id[:-4]))
-                    col = col+1
-                    current_datetime = datetime.now()
-                    worksheet.cell(row, col, str(current_datetime.strftime("%A, %B %d, %Y %I:%M %p")))
-                    row = row+1
-                    col = 1
-                    workbook.save('attendence_excel.xlsx')
-                    print(id[:-4]) # Show id for user
-                    printLCD(id[:-4], col = 0, row = 0)
-                    green_led()
-                    already_attendence_taken.append(id[:-4])
-                    # Display the results
-                    
-                    for (top, right, bottom, left), id in zip(face_locations, idList):
-                        # Scale back up face locations since the frame we detected in was scaled to 1/4 size
-                        top *= 4
-                        right *= 4
-                        bottom *= 4
-                        left *= 4
+            if(id[:-4] not in already_attendence_taken and id != 'unkown'):
+                
+                worksheet.cell(row, col, int(id[:-4]))
+                col = col+1
+                current_datetime = datetime.now()
+                worksheet.cell(row, col, str(current_datetime.strftime("%A, %B %d, %Y %I:%M %p")))
+                row = row+1
+                col = 1
+                workbook.save('attendence_excel.xlsx')
+                print(id[:-4])
+                printLCD(id[:-4], col = 0, row = 0)
+                green_led()
+                already_attendence_taken.append(id[:-4])
+                
+                # Display the results
+                for (top, right, bottom, left) in face_locations:
+                    # Scale back up face locations since the frame we detected in was scaled to 1/4 size
+                    top *= 4
+                    right *= 4
+                    bottom *= 4
+                    left *= 4
 
-                        cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
+                    cv2.rectangle(frame, (left, top), (right, bottom), (36, 255, 200), 2)
 
-                        cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
-                        font = cv2.FONT_HERSHEY_DUPLEX
-                        frame = cv2.putText(frame, id, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
-                        cv2.imwrite(os.path.join(runPath, f"{id[:-4]}.jpg"), frame)
-
+                    cv2.rectangle(frame, (left, bottom - 40), (right, bottom), (36, 255, 200), cv2.FILLED)
+                    font = cv2.FONT_HERSHEY_DUPLEX
+                    frame = cv2.putText(frame, id[:-4], (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
+                    cv2.imwrite(os.path.join(runPath, f"{id[:-4]}.jpg"), frame)
 
         if app.END_SECTION:
             cap.release()
             if app.REAL_OTP == app.unknow_OTP:
                 orange_led()
-                try:
-                    os.remove(os.path.join(logPath, "log.jpg"))
-                except:
-                    pass
                 exit()

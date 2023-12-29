@@ -83,6 +83,9 @@ def endSession():
         sendEmail_End(DR_EMAIL, COURSE_CODE, FILE_PATH = f"attendence_{COURSE_CODE}_{START_TIME}.xlsx")
         print("done send end email")
         # zip for run folder + attendence.xlsx and send
+        # os.rmdir(os.path.join(os.path.join(os.getcwd(), "run")))
+
+        os.remove(os.path.join(os.path.join(os.getcwd(), "log"), "log.jpg"))
         os.remove(f"attendence_{COURSE_CODE}_{START_TIME}.xlsx")
         return thanks()
     return render_template('endSession.html')

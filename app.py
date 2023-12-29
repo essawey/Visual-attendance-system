@@ -6,7 +6,7 @@ from start_session import start_session
 from datetime import datetime
 from sendEmail import sendEmail_Start, sendEmail_End, checkEmail
 import os
-from IoT import board, lcd_command, printSYSEMSTART, lcd_init
+from IoT import board, lcd_command, printSYSEMSTART, lcd_init, printLCD
 import time 
 import openpyxl
 import re
@@ -24,6 +24,7 @@ years = ["Freshman", "Sophomores", "Junior", "Senior 1", "Senior 2"]
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    printLCD("Hello !")
     if request.method == 'POST':
         global DR_EMAIL
         global COURSE_CODE
@@ -32,8 +33,7 @@ def index():
         COURSE_CODE = request.form.get('COURSE_CODE')
         YEAR = request.form.get('year')
         MAJOR = request.form.get('major')
-        print("*"*100)
-        print(DR_EMAIL, request_ROOM_NUM, getRoomNum(), COURSE_CODE , groupPath(MAJOR,YEAR,majors,years))
+        
         if not checkEmail(DR_EMAIL):
             return novaildEmail()
 
@@ -45,7 +45,9 @@ def index():
             wb = openpyxl.Workbook()
             wb.save(os.path.join(os.getcwd(),"attendence_excel.xlsx"))
 
-            start_session(groupPath(MAJOR,
+            start_session(\
+                DR_EMAIL,COURSE_CODE, REAL_OTP, 
+                groupPath(MAJOR,
                                     YEAR,
                                     majors,
                                     years
@@ -108,9 +110,12 @@ def thanks():
 def novaildEmail():
     return render_template('novaildEmail.html')
 
+
 if __name__ == '__main__':
     # Start the LCD
     # install_dependencies()
     lcd_init()
     printSYSEMSTART()
+    print("{:^100}".format('*'*100))
     app.run()
+    print("{:^100}".format('*'*100))

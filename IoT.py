@@ -12,7 +12,6 @@ port = "COM9"
 # Initialize the Arduino board
 board = Arduino(port)
 
-
 GRREN_LED = board.get_pin('d:8:o')
 ORANGE_LED = board.get_pin('d:7:o')
 RED_LED = board.get_pin('d:6:o')
@@ -78,13 +77,14 @@ def lcd_set_cursor(row, col):
     lcd_command(0x80 + offset[row] + col)
 
 def printLCD(text, row=0, col=0):
+    lcd_command(0x01)
     # Set the cursor position
     lcd_set_cursor(row, col)
 
     # Write each character of the text to the LCD
     for char in text:
         lcd_write(ord(char))
-    time.sleep(0.25)
+    time.sleep(0.1)
 
 def red_led(TIME = 0.5):
     RED_LED.write(True)
@@ -105,6 +105,7 @@ def green_led(TIME = 0.5):
     time.sleep(TIME)
 
 def printSYSEMSTART():
+    lcd_command(0x01)
     RED_LED.write(True)
     ORANGE_LED.write(True)
     GRREN_LED.write(True)
@@ -151,6 +152,7 @@ def image_error():
     lcd_command(0x01)
 
 def camera_error():
+    lcd_command(0x01)
     ORANGE_LED.write(True)
 
     # Set the cursor position
@@ -173,6 +175,7 @@ def camera_error():
     lcd_command(0x01)
 
 def image_not_found():
+    lcd_command(0x01)
     RED_LED.write(True)
     ORANGE_LED.write(True)
     # Set the cursor position
@@ -195,6 +198,7 @@ def image_not_found():
     lcd_command(0x01)
 
 def endLCD():
+    lcd_command(0x01)
     lcd_set_cursor(col=0, row=0)
     for char in "Check you mail":
         lcd_write(ord(char))
@@ -204,6 +208,7 @@ def endLCD():
         lcd_write(ord(char))
 
 def no_internet():
+    lcd_command(0x01)
     GRREN_LED.write(True)
     ORANGE_LED.write(True)
     RED_LED.write(True)

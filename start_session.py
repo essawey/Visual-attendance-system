@@ -1,5 +1,4 @@
-def start_session(groupPath):
-    print("Scaning...")
+def start_session(DR_EMAIL,COURSE_CODE, REAL_OTP, groupPath):
     import face_recognition
     import numpy as np
     import os
@@ -94,7 +93,7 @@ def start_session(groupPath):
         no_internet()
     cap = cv2.VideoCapture(0) # port of the Built-in Cam
     print("sending email")
-    sendEmail_Start(app.DR_EMAIL,app.COURSE_CODE,app.REAL_OTP)
+    sendEmail_Start(DR_EMAIL,COURSE_CODE, REAL_OTP)
     print("done email")
 
     while True:

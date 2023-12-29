@@ -70,6 +70,7 @@ def endSession():
         global END_SECTION
         global COURSE_CODE
         unknow_OTP = request.form.get('OTP')
+
         if unknow_OTP.strip() != REAL_OTP:
             return notvaild()
 
@@ -77,12 +78,12 @@ def endSession():
         START_TIME = re.sub(r'[^a-zA-Z0-9_-]', '_', str(START_TIME))
         COURSE_CODE = re.sub(r'[^a-zA-Z0-9_-]', '_', str(COURSE_CODE))
 
-        os.rename("attendence_excel.xlsx", f"attendence_{COURSE_CODE}_{START_TIME}_.xlsx")
+        os.rename("attendence_excel.xlsx", f"attendence_{COURSE_CODE}_{START_TIME}.xlsx")
         print("send end email")
-        sendEmail_End(DR_EMAIL, COURSE_CODE, FILE_PATH = f"attendence_{COURSE_CODE}_{START_TIME}_.xlsx")
+        sendEmail_End(DR_EMAIL, COURSE_CODE, FILE_PATH = f"attendence_{COURSE_CODE}_{START_TIME}.xlsx")
         print("done send end email")
         # zip for run folder + attendence.xlsx and send
-        os.remove(f"attendence_{COURSE_CODE}_{START_TIME}_.xlsx")
+        os.remove(f"attendence_{COURSE_CODE}_{START_TIME}.xlsx")
         return thanks()
     return render_template('endSession.html')
 

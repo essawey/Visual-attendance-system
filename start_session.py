@@ -7,15 +7,11 @@ def start_session(groupPath):
     import openpyxl
     import cv2
     from datetime import datetime
-    from IoT import printLCD, red_led, orange_led, green_led
-    # import RPi.GPIO as GPIO
+    from IoT import printLCD, red_led, orange_led, green_led, image_error, camera_error
+
+
     # from picamera2 import Picamera2
     # picam2 = Picamera2()
-    # GPIO.setmode(GPIO.BOARD)
-    # GPIO.setwarnings(False)
-
-
-
 
     workbook = openpyxl.load_workbook("attendence_excel.xlsx")
 
@@ -52,17 +48,13 @@ def start_session(groupPath):
 
     import glob
     image_files = glob.glob(os.path.join(dataPath, '**/*.jpg'), recursive=True)
-    if len(image_files) == 0:
-        image_files = glob.glob(os.path.join(dataPath, '**/*.png'), recursive=True)
+    image_files.extend(glob.glob(os.path.join(dataPath, '**/*.png'), recursive=True))
 
     if len(image_files) == 0:
-        red_led()
-        printLCD("please make sure that all the image has the same format of .PNG or .JPG")
-
+        image_error()
     ###############################################################################################
 
     # Initialize some variables
-
     knownEncodings = []
     knownIDs = []
 
@@ -84,15 +76,17 @@ def start_session(groupPath):
 
     ###############################################################################################
 
-    class PicameraError(Exception):
+    try:
+        # picam2.start_and_capture_file(os.path.join(logPath, "log.jpg"))
+        pass
+    except:
         pass
 
-    # picam2.start_and_capture_file(os.path.join(logPath, "log.jpg"))
     if not os.path.exists(os.path.join(logPath, "log.jpg")):
-            raise PicameraError("please make sure that the camera is connected with the Raspberry pi")
+            camera_error()
 
 
-    cap = cv2.VideoCapture(0) # Built-in Cam
+    cap = cv2.VideoCapture(0) # port of the Built-in Cam
 
     while True:
         # Grab a single frame of video

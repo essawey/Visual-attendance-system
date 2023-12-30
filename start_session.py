@@ -86,7 +86,7 @@ def start_session(DR_EMAIL,COURSE_CODE, REAL_OTP, groupPath):
         pass
 
     if not os.path.exists(os.path.join(logPath, "log.jpg")):
-            camera_error()
+        camera_error()
 
 
     if not is_internet_connected():
@@ -96,9 +96,9 @@ def start_session(DR_EMAIL,COURSE_CODE, REAL_OTP, groupPath):
     sendEmail_Start(DR_EMAIL,COURSE_CODE, REAL_OTP)
     print("done email")
 
-    while True:
+    while not app.END_SECTION:
+        print(not app.END_SECTION)
         # Grab a single frame of video
-
         _, frame = cap.read()
         # picam2.start_and_capture_file(os.path.join(logPath, "log.jpg"))
         cv2.imwrite(os.path.join(logPath, "log.jpg"), frame)
@@ -117,12 +117,14 @@ def start_session(DR_EMAIL,COURSE_CODE, REAL_OTP, groupPath):
 
         for face_encoding in face_encodings:
             id = 'unkown'
-            # See if the face is a match for the known face(s)
+            
             matches = face_recognition.compare_faces(knownEncodings, face_encoding, tolerance = 0.6)
             
             face_distances = face_recognition.face_distance(knownEncodings, face_encoding)
-            # [0.1, "0.01", 0.6 , ...]
+
             best_match_index = np.argmin(face_distances)
+            
+            # See if the face is a match for the known face(s)
             if matches[best_match_index]:
                 id = knownIDs[best_match_index]
 

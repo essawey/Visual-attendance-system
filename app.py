@@ -52,13 +52,16 @@ def index():
             wb.save(os.path.join(os.getcwd(),"attendence_excel.xlsx"))
 
             start_session(\
-                DR_EMAIL,COURSE_CODE, REAL_OTP, 
-                groupPath(MAJOR,
-                                    YEAR,
-                                    majors,
-                                    years
-                                    )
-                                )
+                DR_EMAIL,
+                COURSE_CODE,
+                REAL_OTP,
+                groupPath(
+                    MAJOR,
+                    YEAR,
+                    majors,
+                    years
+                    )
+            )
             return thanks()
         else:
             return noRoom()
@@ -77,19 +80,30 @@ def endSession():
 
         if unknow_OTP.strip() != REAL_OTP:
             return notvaild()
+
         workbook = openpyxl.load_workbook("attendence_excel.xlsx")
         worksheet = workbook['Sheet']
-        worksheet.cell(worksheet.max_row+1, 1, str("Attendance rate"))
-        print(len(os.listdir(os.path.join(os.getcwd(), groupPath(MAJOR,
-                                    YEAR,
-                                    majors,
-                                    years
-                                    )))))
-        worksheet.cell(worksheet.max_row, 2, (worksheet.max_row-2)/len(os.listdir(os.path.join(os.getcwd(), groupPath(MAJOR,
-                                    YEAR,
-                                    majors,
-                                    years
-                                    )))))
+
+        worksheet.cell(worksheet.max_row+1, 1,
+                        str("Attendance rate")
+                    )
+        
+        worksheet.cell(
+            worksheet.max_row, 2,
+            (worksheet.max_row-2)/len(
+                os.listdir(
+                    os.path.join(
+                        os.getcwd(),
+                        groupPath(
+                            MAJOR,
+                            YEAR,
+                            majors,
+                            years
+                        )
+                    )
+                )
+            )
+        )
         workbook.save('attendence_excel.xlsx')
         endLCD()
         END_SECTION = True
@@ -122,7 +136,9 @@ def noRoom():
 
 @app.route('/thanks')
 def thanks():
-    return render_template('thanks.html')
+    render_template('thanks.html')
+    time.sleep(10)
+    exit()
 
 @app.route('/novaildEmail')
 def novaildEmail():

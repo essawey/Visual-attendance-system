@@ -45,13 +45,13 @@ def start_session(DR_EMAIL,COURSE_CODE, REAL_OTP, groupPath):
 
     dataPath = os.path.join(projectPath, groupPath)
 
+    if len(os.listdir(dataPath)) == 0:
+        image_not_found()
 
     import glob
     image_files = glob.glob(os.path.join(dataPath, '**/*.jpg'), recursive=True)
     image_files.extend(glob.glob(os.path.join(dataPath, '**/*.png'), recursive=True))
 
-    if len(os.listdir(dataPath)) == 0:
-        image_not_found()
 
     if len(image_files) == 0:
         image_error()
@@ -93,11 +93,12 @@ def start_session(DR_EMAIL,COURSE_CODE, REAL_OTP, groupPath):
     if not is_internet_connected():
         no_internet()
     cap = cv2.VideoCapture(0) # port of the Built-in Cam
-    print("sending email")
+    printLCD('Sending Email')
     sendEmail_Start(DR_EMAIL,COURSE_CODE, REAL_OTP)
-    print("done email")
-
-    while not app.END_SECTION:
+    printLCD('Sent !')
+    app.END_SECTION = True
+    printLCD("Scanning ...")
+    while app.END_SECTION:
         # Grab a single frame of video
         _, frame = cap.read()
         # picam2.start_and_capture_file(os.path.join(logPath, "log.jpg"))

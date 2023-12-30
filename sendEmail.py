@@ -77,8 +77,7 @@ def checkEmail(email):
 
 def is_internet_connected():
     try:
-        # Try to create a socket connection to a well-known server (e.g., Google's public DNS server)
         socket.create_connection(("8.8.8.8", 53), timeout=5)
-        return True  # Connection successful, internet is available
+        return True
     except OSError:
-        return False  # Connection failed, no internet
+        return False

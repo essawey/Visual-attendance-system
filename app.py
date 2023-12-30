@@ -80,6 +80,7 @@ def endSession():
 
         if unknow_OTP.strip() != REAL_OTP: # FIXME use hash and verify passwords
             return notvaild()
+        END_SECTION = True
 
         workbook = openpyxl.load_workbook("attendence_excel.xlsx")
         worksheet = workbook['Sheet']
@@ -106,17 +107,17 @@ def endSession():
         )
         workbook.save('attendence_excel.xlsx')
         endLCD()
-        END_SECTION = True
+        
         START_TIME = re.sub(r'[^a-zA-Z0-9_-]', '_', str(START_TIME))
         COURSE_CODE = re.sub(r'[^a-zA-Z0-9_-]', '_', str(COURSE_CODE))
 
         os.rename("attendence_excel.xlsx", f"attendence_{COURSE_CODE}_{START_TIME}.xlsx")
-        print("send end email")
+        printLCD('Sending Email')
         # zip for run folder + attendence.xlsx and send
         sendEmail_End(DR_EMAIL, COURSE_CODE, FILE_PATH = f"attendence_{COURSE_CODE}_{START_TIME}.xlsx")
-        print("done send end email")
+        printLCD('Sent !')
 
-        os.remove(f"attendence_{COURSE_CODE}_{START_TIME}.xlsx")
+        os.remove(f"attendence_{COURSE_CODE}_{START_TIME}.xlsx") # So user can not edit it
 
         # Exit the IoT
         lcd_command(0x01)
@@ -137,7 +138,7 @@ def noRoom():
 @app.route('/thanks')
 def thanks():
     render_template('thanks.html')
-    time.sleep(10)
+    time.sleep(100)
     exit()
 
 @app.route('/novaildEmail')
@@ -150,6 +151,4 @@ if __name__ == '__main__':
     # install_dependencies()
     lcd_init()
     printSYSEMSTART()
-    print("{:^100}".format('*'*100))
     app.run()
-    print("{:^100}".format('*'*100))

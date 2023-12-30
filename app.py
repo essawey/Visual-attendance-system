@@ -1,10 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request
 from groupPath import groupPath
 from getRoomNum import getRoomNum
 from otp import generate_otp
 from start_session import start_session
 from datetime import datetime
-from sendEmail import sendEmail_Start, sendEmail_End, checkEmail
+from sendEmail import sendEmail_End, checkEmail
 import os
 from IoT import board, lcd_command, printSYSEMSTART, lcd_init, printLCD, endLCD
 import time 
@@ -39,7 +39,7 @@ def index():
         COURSE_CODE = request.form.get('COURSE_CODE')
         YEAR = request.form.get('year')
         MAJOR = request.form.get('major')
-        
+
         if not checkEmail(DR_EMAIL):
             return novaildEmail()
 
@@ -78,7 +78,7 @@ def endSession():
         global COURSE_CODE
         unknow_OTP = request.form.get('OTP')
 
-        if unknow_OTP.strip() != REAL_OTP:
+        if unknow_OTP.strip() != REAL_OTP: # FIXME use hash and verify passwords
             return notvaild()
 
         workbook = openpyxl.load_workbook("attendence_excel.xlsx")
@@ -112,9 +112,9 @@ def endSession():
 
         os.rename("attendence_excel.xlsx", f"attendence_{COURSE_CODE}_{START_TIME}.xlsx")
         print("send end email")
+        # zip for run folder + attendence.xlsx and send
         sendEmail_End(DR_EMAIL, COURSE_CODE, FILE_PATH = f"attendence_{COURSE_CODE}_{START_TIME}.xlsx")
         print("done send end email")
-        # zip for run folder + attendence.xlsx and send
 
         os.remove(f"attendence_{COURSE_CODE}_{START_TIME}.xlsx")
 

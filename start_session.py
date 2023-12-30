@@ -7,7 +7,7 @@ def start_session(DR_EMAIL,COURSE_CODE, REAL_OTP, groupPath):
     import cv2
     from datetime import datetime
     from sendEmail import sendEmail_Start, is_internet_connected
-    from IoT import printLCD, red_led, orange_led, green_led, image_error, camera_error,image_not_found, endLCD ,no_internet
+    from IoT import printLCD, green_led, image_error, camera_error,image_not_found ,no_internet
     printLCD("please wait")
 
     # from picamera2 import Picamera2
@@ -55,6 +55,7 @@ def start_session(DR_EMAIL,COURSE_CODE, REAL_OTP, groupPath):
 
     if len(image_files) == 0:
         image_error()
+
     ###############################################################################################
 
     # Initialize some variables
@@ -97,7 +98,6 @@ def start_session(DR_EMAIL,COURSE_CODE, REAL_OTP, groupPath):
     print("done email")
 
     while not app.END_SECTION:
-        print(not app.END_SECTION)
         # Grab a single frame of video
         _, frame = cap.read()
         # picam2.start_and_capture_file(os.path.join(logPath, "log.jpg"))
@@ -111,7 +111,7 @@ def start_session(DR_EMAIL,COURSE_CODE, REAL_OTP, groupPath):
         small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
 
         # Find all the faces and face encodings in the current frame of video
-        face_locations = face_recognition.face_locations(small_frame, number_of_times_to_upsample = 0) 
+        face_locations = face_recognition.face_locations(small_frame, number_of_times_to_upsample = 0) # don't use photo of people in smart phones
         face_encodings = face_recognition.face_encodings(small_frame, face_locations) # N num of stdents per image
 
 

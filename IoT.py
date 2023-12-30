@@ -16,7 +16,6 @@ GRREN_LED = board.get_pin('d:8:o')
 ORANGE_LED = board.get_pin('d:7:o')
 RED_LED = board.get_pin('d:6:o')
 
-
 # Set the pin modes
 pins = [rs_pin, enable_pin, d4_pin, d5_pin, d6_pin, d7_pin]
 for pin in pins:
@@ -144,7 +143,7 @@ def image_error():
     for char in "ERROR #1":
         lcd_write(ord(char))
 
-    time.sleep(100)
+    time.sleep(2)
 
     RED_LED.write(False)
     ORANGE_LED.write(False)
@@ -167,7 +166,7 @@ def camera_error():
     for char in "ERROR #2":
         lcd_write(ord(char))
 
-    time.sleep(100)
+    time.sleep(2)
 
     RED_LED.write(False)
     ORANGE_LED.write(False)
@@ -190,7 +189,7 @@ def image_not_found():
     for char in "ERROR #3":
         lcd_write(ord(char))
 
-    time.sleep(100)
+    time.sleep(2)
 
     RED_LED.write(False)
     ORANGE_LED.write(False)
@@ -224,4 +223,4 @@ def no_internet():
     for char in "ERROR #4":
         lcd_write(ord(char))
 
-    time.sleep(100)
+    time.sleep(2)

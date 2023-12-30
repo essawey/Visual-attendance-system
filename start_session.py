@@ -135,7 +135,6 @@ def start_session(DR_EMAIL,COURSE_CODE, REAL_OTP, groupPath):
                 row = row+1
                 col = 1
                 workbook.save('attendence_excel.xlsx')
-                print(id[:-4])
                 printLCD(id[:-4], col = 0, row = 0)
                 green_led()
                 already_attendence_taken.append(id[:-4])
@@ -157,5 +156,4 @@ def start_session(DR_EMAIL,COURSE_CODE, REAL_OTP, groupPath):
 
         if app.END_SECTION:
             cap.release()
-            if app.REAL_OTP == app.unknow_OTP:
-                endLCD()
+            return

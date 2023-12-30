@@ -6,7 +6,7 @@ from start_session import start_session
 from datetime import datetime
 from sendEmail import sendEmail_Start, sendEmail_End, checkEmail
 import os
-from IoT import board, lcd_command, printSYSEMSTART, lcd_init, printLCD
+from IoT import board, lcd_command, printSYSEMSTART, lcd_init, printLCD, endLCD
 import time 
 import openpyxl
 import re
@@ -16,6 +16,9 @@ DR_EMAIL = None
 COURSE_CODE = None
 END_SECTION = False
 START_TIME = None
+MAJOR = None
+YEAR = None
+
 unknow_OTP = None
 REAL_OTP = generate_otp()
 
@@ -28,6 +31,9 @@ def index():
     if request.method == 'POST':
         global DR_EMAIL
         global COURSE_CODE
+        global YEAR
+        global MAJOR
+
         DR_EMAIL = request.form.get('dr_email')
         request_ROOM_NUM = request.form.get('room_number')
         COURSE_CODE = request.form.get('COURSE_CODE')
@@ -71,7 +77,21 @@ def endSession():
 
         if unknow_OTP.strip() != REAL_OTP:
             return notvaild()
-
+        workbook = openpyxl.load_workbook("attendence_excel.xlsx")
+        worksheet = workbook['Sheet']
+        worksheet.cell(worksheet.max_row+1, 1, str("Attendance rate"))
+        print(len(os.listdir(os.path.join(os.getcwd(), groupPath(MAJOR,
+                                    YEAR,
+                                    majors,
+                                    years
+                                    )))))
+        worksheet.cell(worksheet.max_row, 2, (worksheet.max_row-2)/len(os.listdir(os.path.join(os.getcwd(), groupPath(MAJOR,
+                                    YEAR,
+                                    majors,
+                                    years
+                                    )))))
+        workbook.save('attendence_excel.xlsx')
+        endLCD()
         END_SECTION = True
         START_TIME = re.sub(r'[^a-zA-Z0-9_-]', '_', str(START_TIME))
         COURSE_CODE = re.sub(r'[^a-zA-Z0-9_-]', '_', str(COURSE_CODE))
@@ -81,12 +101,10 @@ def endSession():
         sendEmail_End(DR_EMAIL, COURSE_CODE, FILE_PATH = f"attendence_{COURSE_CODE}_{START_TIME}.xlsx")
         print("done send end email")
         # zip for run folder + attendence.xlsx and send
-        # os.rmdir(os.path.join(os.path.join(os.getcwd(), "run")))
 
-        os.remove(os.path.join(os.path.join(os.getcwd(), "log"), "log.jpg"))
         os.remove(f"attendence_{COURSE_CODE}_{START_TIME}.xlsx")
-        # Exit the IoT
 
+        # Exit the IoT
         lcd_command(0x01)
         time.sleep(1)
         board.exit()

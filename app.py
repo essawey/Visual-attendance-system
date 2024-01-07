@@ -2,7 +2,7 @@ from flask import Flask, render_template, request
 from groupPath import groupPath
 from getRoomNum import getRoomNum
 from otp import generate_otp
-from start_session import start_session
+import start_session
 from datetime import datetime
 from sendEmail import sendEmail_End, checkEmail
 import os
@@ -51,7 +51,7 @@ def index():
             wb = openpyxl.Workbook()
             wb.save(os.path.join(os.getcwd(),"attendence_excel.xlsx"))
 
-            start_session(\
+            start_session.start_session(\
                 DR_EMAIL,
                 COURSE_CODE,
                 REAL_OTP,
@@ -123,6 +123,7 @@ def endSession():
         lcd_command(0x01)
         time.sleep(1)
         board.exit()
+        # Stop
         return thanks()
     return render_template('endSession.html')
 

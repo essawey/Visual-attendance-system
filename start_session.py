@@ -96,8 +96,9 @@ def start_session(DR_EMAIL,COURSE_CODE, REAL_OTP, groupPath):
     printLCD('Sending Email')
     sendEmail_Start(DR_EMAIL,COURSE_CODE, REAL_OTP)
     printLCD('Sent !')
-    app.END_SECTION = True
     printLCD("Scanning ...")
+
+    app.END_SECTION = True
     while app.END_SECTION:
         # Grab a single frame of video
         _, frame = cap.read()
@@ -156,7 +157,3 @@ def start_session(DR_EMAIL,COURSE_CODE, REAL_OTP, groupPath):
                     font = cv2.FONT_HERSHEY_DUPLEX
                     frame = cv2.putText(frame, id[:-4], (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
                     cv2.imwrite(os.path.join(runPath, f"{id[:-4]}.jpg"), frame)
-
-        if app.END_SECTION:
-            cap.release()
-            return

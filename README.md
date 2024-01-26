@@ -41,7 +41,7 @@ The system is designed with backup components, such as a USB camera, in case of 
 
 ## 4. System Architecture
 
-![System Architecture Image](path/to/your/image.png)
+![System Architecture Image](iot.png)
 
 ## 5. Conclusion
 

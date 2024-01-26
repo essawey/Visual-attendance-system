@@ -13,21 +13,17 @@ D5_LCD = 4
 D6_LCD = 3
 D7_LCD = 2
 
-# Set the pin modes to output
+# Set the LCD pin modes to output
 LCD_pins = [RS_LCD, ENALBE_LCD, D4_LCD, D5_LCD, D6_LCD, D7_LCD]
 for pin in LCD_pins:
     board.digital[pin].mode = OUTPUT
 
 # Define the LED pin
-# GRREN_LED = board.get_pin('d:8:o')
-# ORANGE_LED = board.get_pin('d:7:o')
-# RED_LED = board.get_pin('d:6:o')
-
 GRREN_LED = 8
 ORANGE_LED = 7
 RED_LED = 6
 
-# Set the pin modes to output
+# Set the LED pin modes to output
 LED_pins = [GRREN_LED, ORANGE_LED, RED_LED]
 for pin in LED_pins:
     board.digital[pin].mode = OUTPUT

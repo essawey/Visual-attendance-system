@@ -1,1 +1,1 @@
-IoT Project
+Visual Attendance System

@@ -45,8 +45,8 @@ def parallelism_endEmail(DR_EMAIL, COURSE_CODE, FILE_PATH):
     endEmail_Thread = threading.Thread(target=endEmail_FunCall, args=(DR_EMAIL, COURSE_CODE, FILE_PATH))
 
     # end the threads
-    endEmail_Loading_Thread.end()
-    endEmail_Thread.end()
+    endEmail_Loading_Thread.start()
+    endEmail_Thread.start()
 
     # Wait for end Email Thread to complete
     endEmail_Thread.join()

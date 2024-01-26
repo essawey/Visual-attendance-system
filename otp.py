@@ -10,4 +10,4 @@ def generate_otp():
     """
     characters = string.digits + string.ascii_letters  # Include digits and letters
     characters = characters.upper()
-    return ''.join(random.choice(characters) for _ in range(6))
+    # return ''.join(random.choice(characters) for _ in range(6))

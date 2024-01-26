@@ -4,7 +4,7 @@ from getRoomNum import getRoomNum
 from otp import generate_otp
 import start_session
 from datetime import datetime
-from sendEmail import sendEmail_End, checkEmail
+from sendEmail import send_endEmail, checkEmail
 import os
 from IoT import board, lcd_command, printSYSEMSTART, lcd_init, printLCD, endLCD
 import time 
@@ -112,16 +112,18 @@ def endSession():
         COURSE_CODE = re.sub(r'[^a-zA-Z0-9_-]', '_', str(COURSE_CODE))
 
         os.rename("attendence_excel.xlsx", f"attendence_{COURSE_CODE}_{START_TIME}.xlsx")
+
+        
         printLCD('Sending Email')
         # zip for run folder + attendence.xlsx and send
-        sendEmail_End(DR_EMAIL, COURSE_CODE, FILE_PATH = f"attendence_{COURSE_CODE}_{START_TIME}.xlsx")
+        send_endEmail(DR_EMAIL, COURSE_CODE, FILE_PATH = f"attendence_{COURSE_CODE}_{START_TIME}.xlsx")
         printLCD('Sent !')
 
         os.remove(f"attendence_{COURSE_CODE}_{START_TIME}.xlsx") # So user can not edit it
 
         # Exit the IoT
         lcd_command(0x01)
-        time.sleep(1)
+        time.sleep(0.5)
         board.exit()
         # Stop
         return thanks()
@@ -139,8 +141,6 @@ def noRoom():
 @app.route('/thanks')
 def thanks():
     render_template('thanks.html')
-    time.sleep(100)
-    exit()
 
 @app.route('/novaildEmail')
 def novaildEmail():
@@ -148,8 +148,7 @@ def novaildEmail():
 
 
 if __name__ == '__main__':
-    # Start the LCD
     # install_dependencies()
-    lcd_init()
+    lcd_init() # Initialization of the LCD
     printSYSEMSTART()
     app.run()

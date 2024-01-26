@@ -1,25 +1,37 @@
 import time
 from pyfirmata2 import Arduino, OUTPUT
 
-# Define the pin mappings
-rs_pin = 12
-enable_pin = 11
-d4_pin = 5
-d5_pin = 4
-d6_pin = 3
-d7_pin = 2
-port = "COM9"
 # Initialize the Arduino board
+port = "COM3"
 board = Arduino(port)
 
-GRREN_LED = board.get_pin('d:8:o')
-ORANGE_LED = board.get_pin('d:7:o')
-RED_LED = board.get_pin('d:6:o')
+# Define the LCD pin
+RS_LCD = 12
+ENALBE_LCD = 11
+D4_LCD = 5
+D5_LCD = 4
+D6_LCD = 3
+D7_LCD = 2
 
-# Set the pin modes
-pins = [rs_pin, enable_pin, d4_pin, d5_pin, d6_pin, d7_pin]
-for pin in pins:
+# Set the pin modes to output
+LCD_pins = [RS_LCD, ENALBE_LCD, D4_LCD, D5_LCD, D6_LCD, D7_LCD]
+for pin in LCD_pins:
     board.digital[pin].mode = OUTPUT
+
+# Define the LED pin
+# GRREN_LED = board.get_pin('d:8:o')
+# ORANGE_LED = board.get_pin('d:7:o')
+# RED_LED = board.get_pin('d:6:o')
+
+GRREN_LED = 8
+ORANGE_LED = 7
+RED_LED = 6
+
+# Set the pin modes to output
+LED_pins = [GRREN_LED, ORANGE_LED, RED_LED]
+for pin in LED_pins:
+    board.digital[pin].mode = OUTPUT
+
 
 # Function to initialize the LCD
 def lcd_init():
@@ -50,64 +62,73 @@ def lcd_init():
 
 # Function to send a command to the LCD
 def lcd_command(cmd):
-    board.digital[rs_pin].write(0)  # RS low for command
-    board.digital[enable_pin].write(1)
+    board.digital[RS_LCD].write(False)  # RS low for command
+    board.digital[ENALBE_LCD].write(True)
     send_4bits(cmd >> 4)
     send_4bits(cmd)
 
 # Function to send data to the LCD
 def lcd_write(data):
-    board.digital[rs_pin].write(1)  # RS high for data
-    board.digital[enable_pin].write(1)
+    board.digital[RS_LCD].write(True)  # RS high for data
+    board.digital[ENALBE_LCD].write(True)
     send_4bits(data >> 4)
     send_4bits(data)
 
 # Function to send 4 bits to the LCD
 def send_4bits(data):
     for i in range(4):
-        board.digital[pins[i + 2]].write((data >> i) & 1)
-    board.digital[enable_pin].write(0)
+        board.digital[LCD_pins[i + 2]].write((data >> i) & 1)
+    board.digital[ENALBE_LCD].write(False)
     time.sleep(0.001)
-    board.digital[enable_pin].write(1)
+    board.digital[ENALBE_LCD].write(True)
 
 # Function to set the cursor position
 def lcd_set_cursor(row, col):
-    offset = [0x00, 0x40]  # Line offset for a 2-line display
-    lcd_command(0x80 + offset[row] + col)
+    offset = [0x00, 0x40]
+
+    # Set the cursor position based on the row and column
+    position = offset[row] + col
+    command = 0x80 | position
+    lcd_command(command)
+
 
 def printLCD(text, row=0, col=0):
-    lcd_command(0x01)
+    lcd_command(0x01)  # Clear display
+    time.sleep(0.01)
+    
     # Set the cursor position
     lcd_set_cursor(row, col)
-
+    
     # Write each character of the text to the LCD
     for char in text:
         lcd_write(ord(char))
-    time.sleep(0.1)
+    time.sleep(0.01)
+
 
 def red_led(TIME = 0.5):
-    RED_LED.write(True)
+    board.digital[RED_LED].write(True)
     time.sleep(TIME)
-    RED_LED.write(False)
+    board.digital[RED_LED].write(False)
     time.sleep(TIME)
 
 def orange_led(TIME = 0.5):
-    ORANGE_LED.write(True)
+    board.digital[ORANGE_LED].write(True)
     time.sleep(TIME)
-    ORANGE_LED.write(False)
+    board.digital[ORANGE_LED].write(False)
     time.sleep(TIME)
 
 def green_led(TIME = 0.5):
-    GRREN_LED.write(True)
+    board.digital[GRREN_LED].write(True)
     time.sleep(TIME)
-    GRREN_LED.write(False)
+    board.digital[GRREN_LED].write(False)
     time.sleep(TIME)
 
 def printSYSEMSTART():
     lcd_command(0x01)
-    RED_LED.write(True)
-    ORANGE_LED.write(True)
-    GRREN_LED.write(True)
+
+    board.digital[RED_LED].write(True)
+    board.digital[ORANGE_LED].write(True)
+    board.digital[GRREN_LED].write(True)
 
     # Set the cursor position
     lcd_set_cursor(col=0, row=0)
@@ -123,13 +144,17 @@ def printSYSEMSTART():
 
     time.sleep(2)
 
-    RED_LED.write(False)
-    ORANGE_LED.write(False)
-    GRREN_LED.write(False)
+    board.digital[RED_LED].write(False)
+    board.digital[ORANGE_LED].write(False)
+    board.digital[GRREN_LED].write(False)
     lcd_command(0x01)
 
 def image_error():
-    RED_LED.write(True)
+    lcd_command(0x01)
+
+    # Set the cursor position
+    lcd_set_cursor(col=0, row=0)
+    board.digital[RED_LED].write(True)
 
     # Set the cursor position
     lcd_set_cursor(col=0, row=0)
@@ -145,14 +170,14 @@ def image_error():
 
     time.sleep(2)
 
-    RED_LED.write(False)
-    ORANGE_LED.write(False)
-    GRREN_LED.write(False)
+    board.digital[RED_LED].write(False)
+    board.digital[ORANGE_LED].write(False)
+    board.digital[GRREN_LED].write(False)
     lcd_command(0x01)
 
 def camera_error():
     lcd_command(0x01)
-    ORANGE_LED.write(True)
+    board.digital[ORANGE_LED].write(True)
 
     # Set the cursor position
     lcd_set_cursor(col=0, row=0)
@@ -168,15 +193,15 @@ def camera_error():
 
     time.sleep(2)
 
-    RED_LED.write(False)
-    ORANGE_LED.write(False)
-    GRREN_LED.write(False)
+    board.digital[RED_LED].write(False)
+    board.digital[ORANGE_LED].write(False)
+    board.digital[GRREN_LED].write(False)
     lcd_command(0x01)
 
 def image_not_found():
     lcd_command(0x01)
-    RED_LED.write(True)
-    ORANGE_LED.write(True)
+    board.digital[RED_LED].write(True)
+    board.digital[ORANGE_LED].write(True)
     # Set the cursor position
     lcd_set_cursor(col=0, row=0)
     # Write each character of the text to the LCD
@@ -191,9 +216,9 @@ def image_not_found():
 
     time.sleep(2)
 
-    RED_LED.write(False)
-    ORANGE_LED.write(False)
-    GRREN_LED.write(False)
+    board.digital[RED_LED].write(False)
+    board.digital[ORANGE_LED].write(False)
+    board.digital[GRREN_LED].write(False)
     lcd_command(0x01)
 
 def endLCD():
@@ -208,9 +233,9 @@ def endLCD():
 
 def no_internet():
     lcd_command(0x01)
-    GRREN_LED.write(True)
-    ORANGE_LED.write(True)
-    RED_LED.write(True)
+    board.digital[GRREN_LED].write(True)
+    board.digital[ORANGE_LED].write(True)
+    board.digital[RED_LED].write(True)
     # Set the cursor position
     lcd_set_cursor(col=0, row=0)
     # Write each character of the text to the LCD
@@ -224,3 +249,13 @@ def no_internet():
         lcd_write(ord(char))
 
     time.sleep(2)
+
+def loading(executionTime, exitEvent):
+    samplingRate = 10
+    for i in range(samplingRate):
+
+        if exitEvent.is_set():
+            break
+
+        printLCD(f"sending {i*samplingRate}%")
+        time.sleep(executionTime / samplingRate)

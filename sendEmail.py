@@ -11,7 +11,7 @@ PASSWORD = "dyftxileardalgvi"
 SMTP_PORT = 587                 # Standard secure SMTP port
 SMTP_SERVER = "smtp.gmail.com"  # Google SMTP_SERVER
 
-def sendEmail_End(DR_EMAIL, COURSE_CODE, FILE_PATH):
+def send_endEmail(DR_EMAIL, COURSE_CODE, FILE_PATH):
 
     body = f"""
     Dear Professor {DR_EMAIL.split("@")[0]},
@@ -45,8 +45,7 @@ def sendEmail_End(DR_EMAIL, COURSE_CODE, FILE_PATH):
     TIE_server.sendmail(SYSTEM_EMAIL, DR_EMAIL, text)
     TIE_server.quit()
 
-
-def sendEmail_Start(DR_EMAIL, COURSE_CODE, OTP_PASSCODE):
+def send_startEmail(DR_EMAIL, COURSE_CODE, OTP_PASSCODE):
 
     body = f"""
     Dear Professor {DR_EMAIL.split("@")[0]},

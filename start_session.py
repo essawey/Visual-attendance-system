@@ -4,9 +4,10 @@ def start_session(DR_EMAIL,COURSE_CODE, REAL_OTP, groupPath):
     import os
     import app
     import openpyxl
+    from parallelism import parallelism_startEmail
     import cv2
     from datetime import datetime
-    from sendEmail import sendEmail_Start, is_internet_connected
+    from sendEmail import is_internet_connected
     from IoT import printLCD, green_led, image_error, camera_error,image_not_found ,no_internet
     printLCD("please wait")
 
@@ -93,9 +94,8 @@ def start_session(DR_EMAIL,COURSE_CODE, REAL_OTP, groupPath):
     if not is_internet_connected():
         no_internet()
     cap = cv2.VideoCapture(0) # port of the Built-in Cam
-    printLCD('Sending Email')
-    sendEmail_Start(DR_EMAIL,COURSE_CODE, REAL_OTP)
-    printLCD('Sent !')
+    parallelism_startEmail(DR_EMAIL, COURSE_CODE, REAL_OTP)
+    
     printLCD("Scanning ...")
 
     app.END_SECTION = True

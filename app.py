@@ -4,7 +4,9 @@ from getRoomNum import getRoomNum
 from otp import generate_otp
 import start_session
 from datetime import datetime
-from sendEmail import send_endEmail, checkEmail
+from sendEmail import checkEmail
+
+from parallelism import send_endEmail
 import os
 from IoT import board, lcd_command, printSYSEMSTART, lcd_init, printLCD, endLCD
 import time 
@@ -113,11 +115,7 @@ def endSession():
 
         os.rename("attendence_excel.xlsx", f"attendence_{COURSE_CODE}_{START_TIME}.xlsx")
 
-        
-        printLCD('Sending Email')
-        # zip for run folder + attendence.xlsx and send
         send_endEmail(DR_EMAIL, COURSE_CODE, FILE_PATH = f"attendence_{COURSE_CODE}_{START_TIME}.xlsx")
-        printLCD('Sent !')
 
         os.remove(f"attendence_{COURSE_CODE}_{START_TIME}.xlsx") # So user can not edit it
 

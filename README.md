@@ -32,7 +32,7 @@ The system is designed with backup components, such as a USB camera, in case of 
 
 ## 3. Material
 
-- **Raspberry Pi 4:** The core computing unit, serving as the brains of the system.
+- **Raspberry Pi 4 B:** The core computing unit, serving as the brains of the system.
 - **Camera:** Integral for the face recognition feature.
 - **LCD (Liquid Crystal Display):** A visual interface for real-time information.
 - **LEDs (Light-Emitting Diodes):** Light indicators for system states.

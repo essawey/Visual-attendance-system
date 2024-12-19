@@ -44,7 +44,6 @@ The system is designed with backup components, such as a USB camera, in case of 
 ![System Architecture Image](iot.png)
 
 ## 5. Conclusion
-<div style="text-align: right">
+<p style="text-align: justify;">
 In conclusion, our innovative student attendance tracking system, rooted in a Raspberry Pi-based IoT solution, represents a transformative leap in efficiency and accuracy over traditional methods. With a keen focus on privacy, error handling, and redundancy, it ensures a robust and reliable solution tailored for universities in Egypt. The incorporation of real-time facial recognition, intelligent error detection, and backup systems sets a new standard for attendance management, revolutionizing the landscape. This Raspberry Pi-based IoT solution seamlessly captures faces in real-time, surpassing the limitations of conventional methods and prioritizing efficiency, privacy, error handling, and redundancy. The system ensures a reliable and user-friendly experience by eliminating manual data storage, employing OTP-protected communication, and incorporating backup measures. Our forward-thinking approach not only enhances accuracy and fairness but also establishes a benchmark for the future of attendance systems, showcasing the potential of technology in education. As we redefine the attendance tracking experience, we envision a future where advanced technology seamlessly blends with user-friendly interfaces, creating a more streamlined and innovative experience for both students and instructors in Egyptian universities.
-
-</div>
+</p>
